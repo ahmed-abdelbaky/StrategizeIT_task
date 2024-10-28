@@ -1,0 +1,99 @@
+<odoo>
+    <data>
+        <record id="employee_onboard_list_view" model="ir.ui.view">
+            <field name="name">Employee onboarding</field>
+            <field name="model">employee.onboarding</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="employee_id"/>
+                    <field name="job_position"/>
+                    <field name="start_date"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        <record id="employee_onboarding_form_view" model="ir.ui.view">
+            <field name="name">Employee Onboarding Form View</field>
+            <field name="model">employee.onboarding</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button type="object" string="Set In Progress" name="set_state_progress" states="new" class="btn-primary"/>
+                        <button type="object" string="Make Done" name="set_state_finish" states="progress" class="btn-primary"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="employee_id"/>
+                            </group>
+                            <group>
+                                <field name="job_position"/>
+                                <field name="start_date"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page string="Task">
+                                <field name="onboarding_checklist_ids">
+                                    <tree editable="bottom">
+                                        <field name="name"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="employee_onboarding_kanban_view" model="ir.ui.view">
+            <field name="name">Employee onboarding Kanban View</field>
+            <field name="model">employee.onboarding</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_mobile">
+                    <field name="name"/>
+                    <field name="job_position"/>
+                    <field name="start_date"/>
+                    \
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                                <div t-attf-class="#{!selection_mode ? 'text-center' : ''}">
+                                    <strong>
+                                        <span>
+                                            <field name="name"/>
+                                        </span>
+                                    </strong>
+                                </div>
+                                <hr class="mt8 mb8"/>
+                                <div class="row">
+                                    <div t-attf-class="col-12 #{!selection_mode ? 'text-center' : ''}">
+                                        <span>
+                                            Status:
+                                            <field name="state"/>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        <record id="employee_onboarding_action_view" model="ir.actions.act_window">
+            <field name="name">Employee Onboarding</field>
+            <field name="res_model">employee.onboarding</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="view_id" ref="employee_onboarding_kanban_view"/>
+        </record>
+        <menuitem
+                id="menu_employee_onboarding"
+                parent="hr.menu_hr_root"
+                action="employee_onboarding_action_view"
+                sequence="10"
+        />
+    </data>
+</odoo>

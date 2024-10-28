@@ -1,0 +1,22 @@
+<odoo>
+    <data>
+        <record id="employee_form_view_inherit" model="ir.ui.view">
+            <field name="name">Employee</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet" position="inside">
+                    <field name="onboarding_finish_button_invisible" invisible="1"/>
+                </xpath>
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button name="show_onboarding_employee" type="object"
+                            string="Employee Onboarding"
+                            class="oe_stat_button"
+                            attrs="{'invisible': [('onboarding_finish_button_invisible', '=', False)]}">
+
+                    </button>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

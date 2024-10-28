@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_employee_onboarding_model,access_employee_onboarding_rules,model_employee_onboarding,,1,1,1,1
+access_employee_task_model,access_employee_task_rules,model_onboarding_task,,1,1,1,1
