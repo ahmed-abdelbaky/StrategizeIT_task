@@ -19,19 +19,21 @@
             <field name="arch" type="xml">
                 <form>
                     <header>
-                        <button type="object" string="Set In Progress" name="set_state_progress" states="new" class="btn-primary"/>
-                        <button type="object" string="Make Done" name="set_state_finish" states="progress" class="btn-primary"/>
+                        <button type="object" string="Set In Progress" name="set_state_progress" states="new"
+                                class="btn-primary"/>
+                        <button type="object" string="Make Done" name="set_state_finish" states="progress"
+                                class="btn-primary"/>
                         <field name="state" widget="statusbar"/>
                     </header>
                     <sheet>
                         <group>
                             <group>
-                                <field name="name"/>
-                                <field name="employee_id"/>
+                                <field name="name" attrs="{'readonly':[('state', '=', 'done')]}"/>
+                                <field name="employee_id" attrs="{'readonly':[('state', '=', 'done')]}"/>
                             </group>
                             <group>
-                                <field name="job_position"/>
-                                <field name="start_date"/>
+                                <field name="job_position" attrs="{'readonly':[('state', '=', 'done')]}"/>
+                                <field name="start_date" attrs="{'readonly':[('state', '=', 'done')]}"/>
                             </group>
                         </group>
 
@@ -39,8 +41,8 @@
                             <page string="Task">
                                 <field name="onboarding_checklist_ids">
                                     <tree editable="bottom">
-                                        <field name="name"/>
-                                        <field name="state"/>
+                                        <field name="name" attrs="{'readonly':[('state', '=', 'done')]}"/>
+                                        <field name="state" attrs="{'readonly':[('state', '=', 'done')]}"/>
                                     </tree>
                                 </field>
                             </page>
@@ -57,7 +59,7 @@
                     <field name="name"/>
                     <field name="job_position"/>
                     <field name="start_date"/>
-                    \
+
                     <templates>
                         <t t-name="kanban-box">
                             <div t-attf-class="oe_kanban_card oe_kanban_global_click">
@@ -83,12 +85,40 @@
                 </kanban>
             </field>
         </record>
+        <record id="employee_onboarding_search_view" model="ir.ui.view">
+            <field name="name">employee.onboarding.search.view</field>
+            <field name="model">employee.onboarding</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="job_position"/>
+                    <field name="start_date"/>
+                    <field name="state"/>
+
+                    <separator/>
+                    <filter string="Name" name="name" domain="[('name', '=', 'name')]"/>
+                    <filter string="Job Position" name="job_position" domain="[('job_position', '=', 'job_position')]"/>
+                    <filter string="Date" name="start_date" domain="[('start_date', '=', 'start_date')]"/>
+                    <filter string="Status" name="state" domain="[('state', '=', 'state')]"/>
+
+                    <group expand="1" string="Group By">
+                        <filter string="Name" name="name" context="{'group_by': 'name'}"/>
+                        <filter string="Job Position" name="job_position" context="{'group_by': 'job_position'}"/>
+                        <filter string="Status" name="state" context="{'group_by': 'state'}"/>
+                        <filter string="Date" name="start_date" context="{'group_by': 'start_date'}"/>
+
+                    </group>
+                </search>
+            </field>
+        </record>
         <record id="employee_onboarding_action_view" model="ir.actions.act_window">
             <field name="name">Employee Onboarding</field>
             <field name="res_model">employee.onboarding</field>
             <field name="view_mode">kanban,tree,form</field>
             <field name="view_id" ref="employee_onboarding_kanban_view"/>
+            <field name="search_view_id" ref="employee_onboarding_search_view"/>
         </record>
+
         <menuitem
                 id="menu_employee_onboarding"
                 parent="hr.menu_hr_root"

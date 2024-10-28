@@ -2,10 +2,10 @@ from odoo import  models, fields, api
 from odoo.exceptions import ValidationError
 
 
-class employeeOnboarding(models.Model):
+class EmployeeOnboarding(models.Model):
     _name = 'employee.onboarding'
 
-    name = fields.Char("employee's Full Name")
+    name = fields.Char("Employee's Full Name", required=True)
     job_position = fields.Many2one('hr.job', 'Job Position')
     start_date = fields.Date('Start Date', required=True)
     onboarding_checklist_ids = fields.One2many('onboarding.task', 'employee_onboarding_id','Onboarding Checklist')
@@ -17,6 +17,9 @@ class employeeOnboarding(models.Model):
     employee_id = fields.Many2one('hr.employee', 'Employee')
 
     def set_state_progress(self):
+        for rec in self.onboarding_checklist_ids:
+            if rec.state != 'running':
+                raise ValidationError('Task State Must Be Running')
         self.state='progress'
 
     def set_state_finish(self):

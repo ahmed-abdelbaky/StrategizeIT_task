@@ -1,8 +1,8 @@
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 from odoo.tools.populate import compute
 
 
-class Employee(models.Model):
+class HrEmployee(models.Model):
     _inherit = 'hr.employee'
 
     onboarding_finish_button_invisible = fields.Boolean(compute='_compute_invisible_button')
@@ -19,9 +19,11 @@ class Employee(models.Model):
 
     def show_onboarding_employee(self):
         return {
+            'name': _('Onboarding Employee'),
             'res_model': 'employee.onboarding',
             'target': 'current',
             'type': 'ir.actions.act_window',
             'view_mode': 'kanban,form',
+            'context': {'default_employee_id': self.id},
             'domain':[('employee_id', '=', self.id), ('state', '=', 'new')]
         }

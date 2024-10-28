@@ -3,8 +3,8 @@
     'Author': 'Ahmed Abd El Baky',
     'depends':['hr'],
     'data':[
-        'views/view.xml',
-        'views/employee.xml',
+        'views/employee_onboarding.xml',
+        'views/hr_employee.xml',
         'security/ir.model.access.csv',
     ],
     'installable': True,
