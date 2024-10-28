@@ -9,7 +9,7 @@ class Employee(models.Model):
 
     def _compute_invisible_button(self):
         for record in self:
-            onboarding = self.env['employee.onboarding'].search([('employee_id', '=', self.id), ('state', 'in', ['new', 'progress'])])
+            onboarding = self.env['employee.onboarding'].search([('employee_id', '=', self.id), ('state', '=', 'new')])
             if onboarding:
                 record.onboarding_finish_button_invisible = True
             else:
@@ -23,5 +23,5 @@ class Employee(models.Model):
             'target': 'current',
             'type': 'ir.actions.act_window',
             'view_mode': 'kanban,form',
-            'domain':[('employee_id', '=', self.id), ('state', 'in', ['new', 'progress'])]
+            'domain':[('employee_id', '=', self.id), ('state', '=', 'new')]
         }
