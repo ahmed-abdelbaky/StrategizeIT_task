@@ -107,6 +107,27 @@ class CrmIntegration(http.Controller):
                 'error_message': f"Error At Update {rrr_msg}"
             }
 
+    @http.route("/v1/customer/write/<string:partner_id>", auth='none', type="json", methods=["GET"], csrf=False)
+    @validate_token
+    def get_partner(self, partner_id):
+        try:
+            partner_id = partner_id and int(partner_id)
+            partner = request.env['res.partner'].sudo().browse(partner_id)
+            if not partner:
+                return {
+                    "error_message": f"No Partner has this is id {partner_id}", "res_id": partner_id
+                }
+            return {
+                'id': partner_id,
+                'name': partner.name,
+                'phone': partner.phone
+            }
+        except Exception as Error:
+            return {
+                "error_message": Error
+            }
+
+
     def _check_data(self, vals):
         if not vals.get('name'):
             error = "partner name must be enter"
