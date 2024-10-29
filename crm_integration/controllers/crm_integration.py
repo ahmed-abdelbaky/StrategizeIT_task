@@ -127,6 +127,26 @@ class CrmIntegration(http.Controller):
                 "error_message": Error
             }
 
+    @http.route("/v1/customer/Delete/<int:partner_id>", auth='none', type="json", methods=["DELETE"], csrf=False)
+    @validate_token
+    def delete_partner(self, partner_id):
+        try:
+            partner_id = partner_id and int(partner_id)
+            user = get_user_id()
+            partner = request.env['res.partner'].with_user(user.id).browse(partner_id)
+
+            if not  partner:
+                return {
+                    'message_error': f"No Partner Has this id{partner_id}"
+                }
+            partner.with_user(user.id).unlink()
+            return {
+                'message': f"Partner Has Deleted"
+            }
+        except Exception as Error:
+            return {
+                'message_error': Error
+            }
 
     def _check_data(self, vals):
         if not vals.get('name'):
